@@ -39,7 +39,7 @@ function initSnake(color) {
     score: 0,
   };
 }
-let snake1 = initSnake("purple");
+let snake = initSnake("purple");
 
 let apple = {
   position: initPosition(),
@@ -102,7 +102,7 @@ function teleport(snake) {
   }
 }
 
-function eat(snake, apple) {
+function eat(snake, apple ,apple2) {
   if (snake.head.x == apple.position.x && snake.head.y == apple.position.y) {
     apple.position = initPosition();
     snake.score++;
@@ -118,19 +118,19 @@ function eat(snake, apple) {
 function moveLeft(snake) {
   snake.head.x--;
   teleport(snake);
-  eat(snake, apple,apple2);
+  eat(snake,apple,apple2);
 }
 
 function moveRight(snake) {
   snake.head.x++;
   teleport(snake);
-  eat(snake, apple,apple2);
+  eat(snake,apple,apple2);
 }
 
 function moveDown(snake) {
   snake.head.y++;
   teleport(snake);
-  eat(snake, apple,apple2);
+  eat(snake,apple,apple2);
 }
 
 function moveUp(snake) {
