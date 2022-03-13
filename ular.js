@@ -186,10 +186,17 @@ function moveUp(snake) {
 
 function checkCollision(snakes) {
   let isCollide = false;
-  for (let k = 1; k < snakes.body.length; k++) {
-    if (snakes.head.x == snakes.body[k].x && snakes.head.y == snakes.body[k].y) {
-        isCollide = true;
-    };
+  for (let i = 0; i < snakes.length; i++) {
+    for (let j = 0; j < snakes.length; j++) {
+      for (let k = 1; k < snakes[j].body.length; k++) {
+        if (
+          snakes[i].head.x == snakes[j].body[k].x &&
+          snakes[i].head.y == snakes[j].body[k].y
+        ) {
+          isCollide = true;
+        }
+      }
+    }
   }
   if (isCollide) {
     if(life === 1){
@@ -201,8 +208,9 @@ function checkCollision(snakes) {
       MOVE_INTERVAL = 180;
     } else {
       snake = initSnake();
-      life--;
       snake.score = 0;
+      life--;
+      
     }
   }
   return isCollide;
