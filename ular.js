@@ -78,6 +78,7 @@ function draw() {
     let badan = document.getElementById("badan-ular");
     ctx.clearRect(0, 0, CANVAS_SIZE, CANVAS_SIZE);
 
+
     drawImage(ctx,kepala, snake1.head.x, snake1.head.y,);//Menggambar Kepala Ular
     for (let i = 1; i < snake1.body.length; i++) {
       drawImage(ctx, badan, snake1.body[i].x, snake1.body[i].y,);//Menggambar Badan Ular
