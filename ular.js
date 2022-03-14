@@ -339,7 +339,6 @@ function checkCollision(snakes) {
             life = 3;
             MOVE_INTERVAL = 180;
         }else {
-            snakes.score = 0;
             snake1 = initSnake();
             life--
         }
