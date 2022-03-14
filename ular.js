@@ -39,7 +39,7 @@ function initSnake(color) {
     score: 0,
   };
 }
-let snake = initSnake("purple");
+let snake1 = initSnake("purple");
 
 let apple = {
   position: initPosition(),
@@ -58,7 +58,7 @@ function drawImage(ctx,img,x,y){
 
 function drawScore(snake) {
   let scoreCanvas = 0;
-  if (snake.color == snake.color) {
+  if (snake.color == snake1.color) {
     scoreCanvas = document.getElementById("score1Board");
   }
   let scoreCtx = scoreCanvas.getContext("2d");
@@ -78,14 +78,14 @@ function draw() {
     let badan = document.getElementById("badan-ular");
     ctx.clearRect(0, 0, CANVAS_SIZE, CANVAS_SIZE);
 
-    drawImage(ctx,kepala, snake.head.x, snake.head.y,);//Menggambar Kepala Ular
-    for (let i = 1; i < snake.body.length; i++) {
-      drawImage(ctx, badan, snake.body[i].x, snake.body[i].y,);//Menggambar Badan Ular
+    drawImage(ctx,kepala, snake1.head.x, snake1.head.y,);//Menggambar Kepala Ular
+    for (let i = 1; i < snake1.body.length; i++) {
+      drawImage(ctx, badan, snake1.body[i].x, snake1.body[i].y,);//Menggambar Badan Ular
     }
-    drawImage(ctx, apel, apple.position.x, apple.position.y); //Menggambarkan Apel
-    drawImage(ctx, apel, apple2.position.x, apple2.position.y); //Menggambarkan Apel
+    drawImage(ctx, apel, apple.position.x, apple.position.y);
+    drawImage(ctx, apel, apple2.position.x, apple2.position.y);
 
-    drawScore(snake);
+    drawScore(snake1);
   }, REDRAW_INTERVAL);
 }
 
@@ -174,7 +174,7 @@ function move(snake) {
       break;
   }
   moveBody(snake);
-  if (!checkCollision([snake])) {
+  if (!checkCollision([snake1])) {
     setTimeout(function () {
       move(snake);
     }, MOVE_INTERVAL);
@@ -209,18 +209,18 @@ function turn(snake, direction) {
 
 document.addEventListener("keydown", function (event) {
   if (event.key === "ArrowLeft") {
-    turn(snake, DIRECTION.LEFT);
+    turn(snake1, DIRECTION.LEFT);
   } else if (event.key === "ArrowRight") {
-    turn(snake, DIRECTION.RIGHT);
+    turn(snake1, DIRECTION.RIGHT);
   } else if (event.key === "ArrowUp") {
-    turn(snake, DIRECTION.UP);
+    turn(snake1, DIRECTION.UP);
   } else if (event.key === "ArrowDown") {
-    turn(snake, DIRECTION.DOWN);
+    turn(snake1, DIRECTION.DOWN);
   }
 });
 
 function initGame() {
-  move(snake);
+  move(snake1);
 }
 
 initGame();
