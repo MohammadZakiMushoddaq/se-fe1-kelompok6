@@ -9,7 +9,8 @@ const DIRECTION = {
   UP: 2,
   DOWN: 3,
 };
-const MOVE_INTERVAL = 150;
+const MOVE_INTERVAL = 180;
+let life = 3; //inisialisasi nyawa default 3
 
 function initPosition() {
   return {
@@ -31,20 +32,24 @@ function initDirection() {
   return Math.floor(Math.random() * 4);
 }
 
-function initSnake(color) {
+function initSnake() {
   return {
-    color: color,
     ...initHeadAndBody(),
     direction: initDirection(),
     score: 0,
   };
 }
-let snake1 = initSnake("purple");
+let snake1 = initSnake();
 
 let apple = {
   position: initPosition(),
 };
+
 let apple2 = {
+  position: initPosition(),
+};
+
+let nyawaUlar = { 
   position: initPosition(),
 };
 
@@ -52,12 +57,13 @@ function drawCell(ctx, x, y, color) {
   ctx.fillStyle = color;
   ctx.fillRect(x * CELL_SIZE, y * CELL_SIZE, CELL_SIZE, CELL_SIZE);
 }
+
 function drawImage(ctx,img,x,y){
   ctx.drawImage(img, x * CELL_SIZE, y * CELL_SIZE, CELL_SIZE, CELL_SIZE);
 }
 
 function drawScore(snake) {
-  let scoreCanvas = 0;
+  let scoreCanvas;
   if (snake.color == snake1.color) {
     scoreCanvas = document.getElementById("score1Board");
   }
@@ -69,6 +75,20 @@ function drawScore(snake) {
   scoreCtx.fillText("Score : " +snake.score,50,100,200);
 }
 
+function  bilanganPrima(angka) {
+  let bagi = 0;
+  for(let i=1; i <= angka; i++){
+    if(angka%i == 0){
+      bagi++
+    }
+  }
+  if(bagi == 2){
+    return true
+  }else{
+    return false
+  }
+}
+
 function draw() {
   setInterval(function () {
     let snakeCanvas = document.getElementById("snakeBoard");
@@ -76,16 +96,25 @@ function draw() {
     let apel = document.getElementById("apple");
     let kepala = document.getElementById("kepala-ular");
     let badan = document.getElementById("badan-ular");
-    ctx.clearRect(0, 0, CANVAS_SIZE, CANVAS_SIZE);
+    let nyawa = document.getElementById("nyawa-ular");
 
+    ctx.clearRect(0, 0, CANVAS_SIZE, CANVAS_SIZE);
 
     drawImage(ctx,kepala, snake1.head.x, snake1.head.y,);//Menggambar Kepala Ular
     for (let i = 1; i < snake1.body.length; i++) {
       drawImage(ctx, badan, snake1.body[i].x, snake1.body[i].y,);//Menggambar Badan Ular
     }
-    drawImage(ctx, apel, apple.position.x, apple.position.y);
-    drawImage(ctx, apel, apple2.position.x, apple2.position.y);
+    drawImage(ctx, apel, apple.position.x, apple.position.y); //Menggambarkan Apel
+    drawImage(ctx, apel, apple2.position.x, apple2.position.y); //Menggambarkan Apel
 
+    if(bilanganPrima(snake1.score)){
+      drawImage(ctx, nyawa, nyawaUlar.position.x, nyawaUlar.position.y); //Menampilkan nyawa di canvas
+    }
+
+    for(let i = 0; i < life; i++){
+      scoreCanvas = document.getElementById("score1Board"); //menampilkan nyawa di pojok kiri atas
+      drawImage(ctx, nyawa, i+0.2, 0.2);
+    }
     drawScore(snake1);
   }, REDRAW_INTERVAL);
 }
@@ -118,44 +147,67 @@ function eat(snake, apple ,apple2) {
   }
 }
 
+function eatLive(snake, nyawaUlar) {
+  if (snake.head.x == nyawaUlar.position.x && snake.head.y == nyawaUlar.position.y) {
+      nyawaUlar.position = initPosition();
+      snake.score++;
+      snake.body.push({x: snake.head.x, y: snake.head.y});
+      life++;
+  }
+}
+
 function moveLeft(snake) {
   snake.head.x--;
   teleport(snake);
   eat(snake,apple,apple2);
+  eatLive(snake, nyawaUlar);
 }
 
 function moveRight(snake) {
   snake.head.x++;
   teleport(snake);
   eat(snake,apple,apple2);
+  eatLive(snake, nyawaUlar);
 }
 
 function moveDown(snake) {
   snake.head.y++;
   teleport(snake);
   eat(snake,apple,apple2);
+  eatLive(snake, nyawaUlar);
 }
 
 function moveUp(snake) {
   snake.head.y--;
   teleport(snake);
   eat(snake, apple,apple2);
+  eatLive(snake, nyawaUlar)
 }
 
 function checkCollision(snakes) {
   let isCollide = false;
-  for (let i = 0; i < snakes.length; i++) {
-    for (let j = 0; j < snakes.length; j++) {
-      for (let k = 1; k < snakes[j].body.length; k++) {
-        if (
-          snakes[i].head.x == snakes[j].body[k].x &&
-          snakes[i].head.y == snakes[j].body[k].y
-        ) {
-          isCollide = true;
-        }
+  for (let k = 1; k < snakes.body.length; k++) {
+    if (snakes.head.x == snakes.body[k].x && snakes.head.y == snakes.body[k].y) {
+        isCollide = true;
+    }
+  } 
+
+
+  if (isCollide) {
+    if(life === 1){
+        var bel = new Audio('assets/game-over.mp3');
+        bel.play();
+        alert("Game over");
+        level = 1
+        snake1 = initSnake();
+        life = 3;
+        MOVE_INTERVAL = 180;
+    }else {
+        snakes.score = 0;
+        snake1 = initSnake();
+        life--
       }
     }
-  }
   return isCollide;
 }
 
@@ -175,18 +227,12 @@ function move(snake) {
       break;
   }
   moveBody(snake);
-  if (!checkCollision([snake1])) {
-    setTimeout(function () {
-      move(snake);
-    }, MOVE_INTERVAL);
-  } else {
-    console.log("collide", snake.color);
-    if (snake == snake) {
-      snake = initSnake("purple");
-      setTimeout(function () {
-        move(snake);
+  if (!checkCollision(snake)) {
+      setTimeout(function() {
+          move(snake);
       }, MOVE_INTERVAL);
-    }
+  } else {
+      move(snake1);
   }
 }
 
@@ -220,8 +266,6 @@ document.addEventListener("keydown", function (event) {
   }
 });
 
-function initGame() {
-  move(snake1);
-}
 
-initGame();
+move(snake1)
+ 
