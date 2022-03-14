@@ -221,7 +221,7 @@ function teleport(snake) {
 //Fitur Untuk Cek Leve;
 function cekLevel(snake) {
     if(snake.score % 5 === 0){
-        alert("Level"+ level +"Complete");
+        alert("Level "+ level +" Complete");
         level++;
         let bel = new Audio('assets/levelUp.mp3');
         bel.play();
