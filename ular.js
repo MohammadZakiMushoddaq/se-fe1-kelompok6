@@ -403,3 +403,4 @@ document.addEventListener("keydown", function (event) {
 })
 
 move(snake1)
+
