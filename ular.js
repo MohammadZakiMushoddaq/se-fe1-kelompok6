@@ -95,8 +95,8 @@ let tembok5 = {
 }
 let tembok6 = {
     position: {
-        x: [7,8,9,10,11,12,13],
-        y: [8,8,8,8,8,8,8,8],
+        x: [8,9,10,11,12],
+        y: [8,8,8,8,8,8],
     },
     color: "black",
 }
@@ -221,10 +221,10 @@ function teleport(snake) {
 //Fitur Untuk Cek Leve;
 function cekLevel(snake) {
     if(snake.score % 5 === 0){
-        alert("Level "+ level +" Complete");
+        alert("Level  "+  level  +"  Complete");
         level++;
-        let bel = new Audio('assets/levelUp.mp3');
-        bel.play();
+        let lvlUp = new Audio('assets/levelUp.mp3');
+        lvlUp.play();
         MOVE_INTERVAL -=20;
     }
 }
@@ -331,7 +331,7 @@ function checkCollision(snakes) {
 
     if (isCollide) {
         if(life === 1){
-            var gameOver = new Audio('assets/game-over.mp3');
+            let gameOver = new Audio('assets/game-over.mp3');
             gameOver.play();
             alert("Game over");
             level = 1
