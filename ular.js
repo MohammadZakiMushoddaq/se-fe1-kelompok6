@@ -74,11 +74,14 @@ function draw() {
     let snakeCanvas = document.getElementById("snakeBoard");
     let ctx = snakeCanvas.getContext("2d");
     let apel = document.getElementById("apple");
+    let kepala = document.getElementById("kepala-ular");
+    let badan = document.getElementById("badan-ular");
     ctx.clearRect(0, 0, CANVAS_SIZE, CANVAS_SIZE);
 
-    drawCell(ctx, snake1.head.x, snake1.head.y, snake1.color);
+
+    drawImage(ctx,kepala, snake1.head.x, snake1.head.y,);//Menggambar Kepala Ular
     for (let i = 1; i < snake1.body.length; i++) {
-      drawCell(ctx, snake1.body[i].x, snake1.body[i].y, snake1.color);
+      drawImage(ctx, badan, snake1.body[i].x, snake1.body[i].y,);//Menggambar Badan Ular
     }
     drawImage(ctx, apel, apple.position.x, apple.position.y);
     drawImage(ctx, apel, apple2.position.x, apple2.position.y);
